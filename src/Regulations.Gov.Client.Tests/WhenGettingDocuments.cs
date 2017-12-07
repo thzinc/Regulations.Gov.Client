@@ -28,5 +28,72 @@ namespace Regulations.Gov.Client.Tests
                 .NotBeNullOrEmpty()
                 .And.OnlyContain(document => document.DocumentType == "Proposed Rule");
         }
+
+        [TestMethod]
+        public async Task ItShouldGetPublicSubmissions()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsBySubtype()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByDocket()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByCommentPeriod()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByFederalAgencies()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByPage()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByCommentPeriodDate()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByCreationDate()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByReceivedDate()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByPostedDate()
+        {
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public async Task ItShouldSortDocuments()
+        {
+            Assert.Inconclusive();
+        }
+
     }
 }

@@ -70,5 +70,28 @@ namespace Regulations.Gov.Client
                 }
             }
         }
+
+        public string Subtype { get; set; } // docst
+        public string DocketId { get; set; } // dktid
+        public string DocketType { get; set; } // dkt
+        public string DocketSubtype { get; set; } // dktst
+        public string DocketSubtype2 { get; set; } // dktst2
+        public string CommentPeriod { get; set; } // cp
+        public ISet<string> FederalAgencies { get; set; } // a
+        public int? ResultsPerPage { get; set; } // rpp
+        public int? PageOffset { get; set; } // po
+        public int? CommentPeriodClosingSoon { get; set; } // cs
+        public DateTimeOffset CommentPeriodStartDate { get; set; } // cmsd
+        public DateTimeOffset CommentPeriodEndDate { get; set; } // cmd
+        public int? NewlyPosted { get; set; } // np
+        public DateTimeOffset CreationStartDate { get; set; } // crd
+        public DateTimeOffset CreationEndDate { get; set; } // crd
+        public DateTimeOffset ReceivedStartDate { get; set; } // rc
+        public DateTimeOffset ReceivedEndDate { get; set; } // rc
+        public DateTimeOffset PostedStartDate { get; set; } // pd
+        public DateTimeOffset PostedEndDate { get; set; } // pd
+        public string Category { get; set; } // cat
+        public string SortBy { get; set; } // sb
+        public string SortOrder { get; set; } // so
     }
 }
