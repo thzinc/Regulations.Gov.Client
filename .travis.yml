@@ -11,5 +11,5 @@ script:
   - dotnet test src/Regulations.Gov.Client.Tests/Regulations.Gov.Client.Tests.csproj
   - "if [[ $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_TAG ]]; then 
   dotnet pack src/Regulations.Gov.Client/Regulations.Gov.Client.csproj --configuration Release /p:Version=$TRAVIS_TAG;
-  dotnet nuget push src/Regulations.Gov.Client/bin/Release/*.nupkg -k $NUGET_API_KEY;
+  dotnet nuget push src/Regulations.Gov.Client/bin/Release/*.nupkg -s https://www.nuget.org/api/v2/package -k $NUGET_API_KEY;
   fi"
