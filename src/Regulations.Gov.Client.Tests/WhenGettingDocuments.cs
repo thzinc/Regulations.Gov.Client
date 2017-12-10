@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
+using System;
+using System.Collections.Generic;
 
 namespace Regulations.Gov.Client.Tests
 {
@@ -12,88 +14,136 @@ namespace Regulations.Gov.Client.Tests
         [TestInitialize]
         public void SetUp()
         {
-            _client = new RegulationsGovClient("DEMO_KEY");
-        }
-
-        [TestMethod]
-        public async Task ItShouldGetDocumentsByType()
-        {
-            var query = new DocumentsQuery
-            {
-                Type = DocumentType.ProposedRule,
-            };
-            var results = await _client.GetDocuments(query);
-            results.Should().NotBeNull();
-            results.Documents.Should()
-                .NotBeNullOrEmpty()
-                .And.OnlyContain(document => document.DocumentType == "Proposed Rule");
+            var apiKey = Environment.GetEnvironmentVariable("DATA_GOV_API_KEY") ?? "DEMO_KEY";
+            _client = new RegulationsGovClient(apiKey);
         }
 
         [TestMethod]
         public async Task ItShouldGetPublicSubmissions()
         {
-            Assert.Inconclusive();
-        }
-
-        [TestMethod]
-        public async Task ItShouldGetDocumentsBySubtype()
-        {
-            Assert.Inconclusive();
+            var query = new DocumentsQuery
+            {
+                Type = DocumentType.PublicSubmission,
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should()
+                .NotBeNullOrEmpty()
+                .And.OnlyContain(document => document.DocumentType == "Public Submission");
         }
 
         [TestMethod]
         public async Task ItShouldGetDocumentsByDocket()
         {
-            Assert.Inconclusive();
+            var query = new DocumentsQuery
+            {
+                DocketId = "DOI-2017-0002",
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should()
+                .NotBeNullOrEmpty()
+                .And.OnlyContain(document => document.DocketId == "DOI-2017-0002")
+                .And.OnlyContain(document => document.DocumentId.StartsWith("DOI-2017-0002-"));
         }
 
         [TestMethod]
-        public async Task ItShouldGetDocumentsByCommentPeriod()
+        public async Task ItShouldGetDocumentsByOpenCommentPeriod()
         {
-            Assert.Inconclusive();
+            var query = new DocumentsQuery
+            {
+                CommentPeriod = CommentPeriodStatus.Open,
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should()
+                .NotBeNullOrEmpty()
+                .And.OnlyContain(document => document.CommentStartDate <= DateTimeOffset.Now && DateTimeOffset.Now <= document.CommentDueDate);
+        }
+
+        [TestMethod]
+        public async Task ItShouldGetDocumentsByClosedCommentPeriod()
+        {
+            var query = new DocumentsQuery
+            {
+                CommentPeriod = CommentPeriodStatus.Closed,
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should()
+                .NotBeNullOrEmpty()
+                .And.NotContain(document => document.CommentStartDate <= DateTimeOffset.Now && DateTimeOffset.Now <= document.CommentDueDate);
         }
 
         [TestMethod]
         public async Task ItShouldGetDocumentsByFederalAgencies()
         {
-            Assert.Inconclusive();
+            var query = new DocumentsQuery
+            {
+                FederalAgencies = new HashSet<string>
+                {
+                    "DOI",
+                    "EPA"
+                },
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should()
+                .NotBeNullOrEmpty()
+                .And.OnlyContain(document => document.AgencyAcronym == "DOI" || document.AgencyAcronym == "EPA");
         }
 
         [TestMethod]
         public async Task ItShouldGetDocumentsByPage()
         {
-            Assert.Inconclusive();
+            var query = new DocumentsQuery
+            {
+                DocketId = "DOI-2017-0002",
+                ResultsPerPage = 10,
+                PageOffset = 10,
+                SortBy = SortFields.DocId,
+                SortOrder = SortOrderType.Ascending,
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should().NotBeNullOrEmpty();
+            string lastDocumentId = null;
+            foreach (var document in results.Documents)
+            {
+                string.CompareOrdinal(lastDocumentId, document.DocumentId).Should()
+                    .Be(-1, $"Last document ID {lastDocumentId} should be before {document.DocumentId}");
+            }
         }
 
         [TestMethod]
-        public async Task ItShouldGetDocumentsByCommentPeriodDate()
+        [Ignore("CommentPeriodStartDate (cmsd) appears to not work in Regulations.gov API")]
+        public async Task ItShouldGetDocumentsByCommentPeriodStartDate()
         {
-            Assert.Inconclusive();
+            var startDate = DateTimeOffset.Parse("2017-01-01");
+            var query = new DocumentsQuery
+            {
+                CommentPeriodStartDate = startDate,
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should()
+                .NotBeNullOrEmpty()
+                .And.OnlyContain(document => document.CommentStartDate >= startDate);
         }
 
         [TestMethod]
-        public async Task ItShouldGetDocumentsByCreationDate()
+        public async Task ItShouldGetDocumentsByCommentPeriodEndDate()
         {
-            Assert.Inconclusive();
+            var endDate = DateTimeOffset.Parse("2017-01-01");
+            var query = new DocumentsQuery
+            {
+                CommentPeriodEndDate = endDate,
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should()
+                .NotBeNullOrEmpty()
+                .And.OnlyContain(document => document.CommentDueDate.HasValue && endDate >= document.CommentDueDate.Value.Date);
         }
-
-        [TestMethod]
-        public async Task ItShouldGetDocumentsByReceivedDate()
-        {
-            Assert.Inconclusive();
-        }
-
-        [TestMethod]
-        public async Task ItShouldGetDocumentsByPostedDate()
-        {
-            Assert.Inconclusive();
-        }
-
-        [TestMethod]
-        public async Task ItShouldSortDocuments()
-        {
-            Assert.Inconclusive();
-        }
-
     }
 }

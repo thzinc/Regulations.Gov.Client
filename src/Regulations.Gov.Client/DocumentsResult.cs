@@ -5,5 +5,6 @@ namespace Regulations.Gov.Client
     public class DocumentsResult
     {
         public List<DocumentStub> Documents { get; set; }
+        public int TotalNumRecords { get; set; }
     }
 }
