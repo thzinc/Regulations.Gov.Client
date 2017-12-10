@@ -1,0 +1,15 @@
+language: csharp
+
+os: linux
+dist: trusty
+sudo: required
+dotnet: 2.0.0
+
+script:
+  - dotnet restore
+  - dotnet build --configuration Release
+  - dotnet test src/Regulations.Gov.Client.Tests/Regulations.Gov.Client.Tests.csproj
+  - "if [[ $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_TAG ]]; then 
+  dotnet pack src/Regulations.Gov.Client/Regulations.Gov.Client.csproj --configuration Release /p:Version=$TRAVIS_TAG;
+  nuget push src/Regulations.Gov.Client/bin/Release/*.nupkg -ApiKey $NUGET_API_KEY;
+  fi"
