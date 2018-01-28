@@ -4,7 +4,7 @@ This is a client to access documents from the Regulations.gov API.
 
 ## Quickstart
 
-First, sign up for a [Data.gov API key](https://api.data.gov/signup/).
+First, sign up for a [Data.gov API key](https://api.data.gov/signup/). Then, per a change in process as of 24 Jan 2018, request access to the Regulations.gov API at regulations@erulemakinghelpdesk.com.
 
 Add the `Regulations.Gov.Client` package to your project:
 
