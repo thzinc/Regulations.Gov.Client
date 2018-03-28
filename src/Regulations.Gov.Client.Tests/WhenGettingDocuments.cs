@@ -156,7 +156,7 @@ namespace Regulations.Gov.Client.Tests
         [TestMethod]
         public async Task ItShouldGetDocumentsByCommentPeriodEndDate()
         {
-            var endDate = DateTimeOffset.Parse("2017-01-01T00:00:00-08:00");
+            var endDate = DateTimeOffset.Parse("2017-01-01T23:59:59-08:00");
             var query = new DocumentsQuery
             {
                 CommentPeriodEndDate = endDate,
@@ -165,7 +165,7 @@ namespace Regulations.Gov.Client.Tests
             results.Should().NotBeNull();
             results.Documents.Should()
                 .NotBeNullOrEmpty()
-                .And.OnlyContain(document => document.CommentDueDate.HasValue && endDate >= document.CommentDueDate.Value.Date);
+                .And.OnlyContain(document => document.CommentDueDate.HasValue && endDate >= document.CommentDueDate.Value);
         }
     }
 }
