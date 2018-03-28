@@ -121,7 +121,7 @@ namespace Regulations.Gov.Client.Tests
             var query = new DocumentsQuery
             {
                 ResultsPerPage = 10,
-                PageOffset = 10,
+                PageOffset = 0,
                 SortBy = SortFields.PostedDate,
                 SortOrder = SortOrderType.Ascending,
             };
@@ -131,6 +131,7 @@ namespace Regulations.Gov.Client.Tests
             string lastDocumentId = null;
             foreach (var document in results.Documents)
             {
+                document.PostedDate.Should().BeOnOrBefore(DateTimeOffset.Parse("1900-04-10T00:00:00-05:00"));
                 string.CompareOrdinal(lastDocumentId, document.DocumentId).Should()
                     .Be(-1, $"Last document ID {lastDocumentId} should be before {document.DocumentId}");
             }
@@ -155,7 +156,7 @@ namespace Regulations.Gov.Client.Tests
         [TestMethod]
         public async Task ItShouldGetDocumentsByCommentPeriodEndDate()
         {
-            var endDate = DateTimeOffset.Parse("2017-01-01");
+            var endDate = DateTimeOffset.Parse("2017-01-01T00:00:00-08:00");
             var query = new DocumentsQuery
             {
                 CommentPeriodEndDate = endDate,

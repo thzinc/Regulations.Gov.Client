@@ -18,7 +18,7 @@ namespace Regulations.Gov.Client
             }
             else if (reader.TokenType == JsonToken.String)
             {
-                var str = reader.ReadAsString();
+                var str = reader.Value.ToString();
                 if (DateTimeOffset.TryParse(str, out var dto))
                 {
                     return dto;
@@ -28,7 +28,7 @@ namespace Regulations.Gov.Client
                     var (date, time, _) = str.Split(new[] { 'T' }, 2);
                     var (timeOfDay, zone, _) = time.Split(new[] { '-' }, 2);
                     var (hour, minute, _) = zone.Split(new[] { ':' });
-                    str = $"{date}T${timeOfDay}-{hour}:{minute}";
+                    str = string.Join("T", date, string.Join("-", timeOfDay, string.Join(":", hour, minute)));
                     if (DateTimeOffset.TryParse(str, out dto))
                     {
                         return dto;
