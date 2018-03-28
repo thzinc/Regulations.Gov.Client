@@ -116,6 +116,27 @@ namespace Regulations.Gov.Client.Tests
         }
 
         [TestMethod]
+        public async Task ItShouldGetReallyOldDocuments()
+        {
+            var query = new DocumentsQuery
+            {
+                ResultsPerPage = 10,
+                PageOffset = 10,
+                SortBy = SortFields.PostedDate,
+                SortOrder = SortOrderType.Ascending,
+            };
+            var results = await _client.GetDocuments(query);
+            results.Should().NotBeNull();
+            results.Documents.Should().NotBeNullOrEmpty();
+            string lastDocumentId = null;
+            foreach (var document in results.Documents)
+            {
+                string.CompareOrdinal(lastDocumentId, document.DocumentId).Should()
+                    .Be(-1, $"Last document ID {lastDocumentId} should be before {document.DocumentId}");
+            }
+        }
+
+        [TestMethod]
         [Ignore("CommentPeriodStartDate (cmsd) appears to not work in Regulations.gov API")]
         public async Task ItShouldGetDocumentsByCommentPeriodStartDate()
         {
