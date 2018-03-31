@@ -3,6 +3,7 @@
 namespace Regulations.Gov.Client
 {
     using System.Collections.Generic;
+    using System.Net.Http;
     using System.Threading.Tasks;
     using Regulations.Gov.Client;
     using RestEase;
@@ -17,5 +18,8 @@ namespace Regulations.Gov.Client
 
         [Get("regulations/v3/docket.json")]
         Task<Docket> GetDocket(string api_key, string docketId);
+
+        [Get("regulations/v3/download")]
+        Task<HttpResponseMessage> GetDownload(string api_key, string documentId, string contentType = null, int? attachmentNumber = null);
     }
 }

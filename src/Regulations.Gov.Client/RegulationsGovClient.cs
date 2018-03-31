@@ -1,3 +1,4 @@
+using System.Net.Http;
 using System.Threading.Tasks;
 using RestEase;
 
@@ -26,6 +27,11 @@ namespace Regulations.Gov.Client
         public Task<Docket> GetDocket(string docketId)
         {
             return _client.GetDocket(_apiKey, docketId);
+        }
+
+        public Task<HttpResponseMessage> GetDownload(string documentId, string contentType = null, int? attachmentNumber = null)
+        {
+            return _client.GetDownload(_apiKey, documentId, contentType, attachmentNumber);
         }
     }
 }
